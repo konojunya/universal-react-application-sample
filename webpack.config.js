@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const LoadablePlugin = require("@loadable/webpack-plugin");
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
@@ -28,11 +29,7 @@ module.exports = {
         exclude: [/node_modules/, /build/],
         use: [
           {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true,
-              happyPackMode: true
-            }
+            loader: "babel-loader"
           }
         ]
       }
@@ -52,6 +49,7 @@ module.exports = {
       },
       "process.title": JSON.stringify("browser")
     }),
-    new webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new LoadablePlugin()
   ]
 };

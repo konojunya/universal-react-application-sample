@@ -2,8 +2,7 @@ import { RouteConfig } from "react-router-config";
 
 // components
 import { AppShell } from "../foundation/components/pages/AppShell";
-import Index from "../foundation/components/pages/Index";
-import About from "../foundation/components/pages/About";
+import { Index, About } from "./route";
 
 const routes: RouteConfig[] = [
   {
@@ -12,12 +11,12 @@ const routes: RouteConfig[] = [
       {
         path: "/",
         exact: true,
-        ...Index
+        component: Index
       },
       {
         path: "/about",
         exact: true,
-        ...About
+        component: About
       }
     ]
   }

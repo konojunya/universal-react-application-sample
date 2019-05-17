@@ -11,10 +11,9 @@ const NavigatorContainer: React.FunctionComponent<Props> = props => {
   if (preState) {
     delete (window as any).__STATE__;
   } else {
-    loadMatchPathData(location.pathname).then(res => {
-      console.log("client loaded");
-      console.log(res);
-    });
+    (async () => {
+      await loadMatchPathData(location.pathname);
+    })();
   }
   return <Route location={props.location} render={() => props.children} />;
 };

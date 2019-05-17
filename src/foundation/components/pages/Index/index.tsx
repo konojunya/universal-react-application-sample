@@ -14,7 +14,4 @@ const loadData = () => {
   });
 };
 
-export default {
-  component: Index,
-  loadData
-};
+export default Index;

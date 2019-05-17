@@ -10,7 +10,4 @@ const loadData = () => {
   });
 };
 
-export default {
-  component: About,
-  loadData
-};
+export default About;

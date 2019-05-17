@@ -1,28 +1,45 @@
 import * as express from "express";
 import * as React from "react";
 import { join } from "path";
-import { matchRoutes, renderRoutes } from "react-router-config";
+import { renderRoutes } from "react-router-config";
 import { routes } from "./router";
-import { renderToNodeStream } from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Html } from "./foundation/layouts/Html";
-import { loadMatchPathData } from "./foundation/utils/loadMatchPathData";
+import { ChunkExtractor } from "@loadable/server";
 
 const app = express();
 
 app.use("/assets", express.static(join(__dirname, "../public")));
 
-app.get("*", (req, res) => {
-  loadMatchPathData(req.path).then(() => {
-    const context = {};
-    renderToNodeStream(
-      <Html state={"state"}>
-        <StaticRouter location={req.url} context={context}>
-          {renderRoutes(routes)}
-        </StaticRouter>
-      </Html>
-    ).pipe(res);
-  });
+app.get("*", async (req, res) => {
+  const context = {};
+  const statsFile = join(__dirname, "../public/loadable-stats.json");
+  const extractor = new ChunkExtractor({ statsFile });
+  const jsx = extractor.collectChunks(
+    <StaticRouter location={req.url} context={context}>
+      {renderRoutes(routes)}
+    </StaticRouter>
+  );
+  const markup = renderToString(jsx);
+  const scriptTags = extractor.getScriptTags();
+  res.send(
+    renderToString(
+      <Html markup={markup} state={"state"} scripts={scriptTags} />
+    )
+  );
+
+  // loadMatchPathData(req.path).then(() => {
+  //   const context = {};
+  //   const html = renderToString(
+  //     <Html state={"state"}>
+  //       <StaticRouter location={req.url} context={context}>
+  //         {renderRoutes(routes)}
+  //       </StaticRouter>
+  //     </Html>
+  //   );
+  //   res.send(html);
+  // });
 });
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;

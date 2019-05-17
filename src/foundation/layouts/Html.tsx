@@ -2,7 +2,9 @@ import * as React from "react";
 import * as serialize from "serialize-javascript";
 
 interface Props {
+  markup: string;
   state: string;
+  scripts: any;
 }
 export const Html: React.FunctionComponent<Props> = props => {
   return (
