@@ -28,18 +28,6 @@ app.get("*", async (req, res) => {
       <Html markup={markup} state={"state"} scripts={scriptTags} />
     )
   );
-
-  // loadMatchPathData(req.path).then(() => {
-  //   const context = {};
-  //   const html = renderToString(
-  //     <Html state={"state"}>
-  //       <StaticRouter location={req.url} context={context}>
-  //         {renderRoutes(routes)}
-  //       </StaticRouter>
-  //     </Html>
-  //   );
-  //   res.send(html);
-  // });
 });
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
